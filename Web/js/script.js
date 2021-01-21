@@ -120,8 +120,19 @@ function tableData() {
         $(".btnDel").css({"display":"none"});
         $(".title").css({"position":"relative","width":"auto"});
     } else {
-        $(".title").css({"position":"fixed","width":"350px"});
-        $(".btnDel").css({"display":"block"});
+        $(dataUI).scroll(function() {
+            let scroll = $(dataUI).scrollTop();
+            if(scroll > 0) {
+                $(".title").addClass("shadow");
+            } else {
+                $(".title").removeClass("shadow");
+            }
+        });
+        $(".title").css({"position":"fixed","width":"370px","margin-left":"-10px","padding-left":"10px"});
+        // $(".btnDel").css({"position":"fixed"});
+        $(".box").css({"height":"450px"});
+        $(".box .container:nth-child(2)").css({"width":"500px","padding-right":"15px"});
+        $("#dataAll").css({"margin-top":"100px"});
         // Jika ada localStorage, hilangkan tulisan "No data"
         document.getElementById("dataAll").innerHTML = "";
         // Buat variabel $table untuk membuat elemen <table>
