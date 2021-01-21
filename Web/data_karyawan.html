@@ -36,15 +36,18 @@
 
             <a href="#" id="viewAllData">Lihat semua data karyawan yang telah ditambahkan.</a>
 
-            
         </div>
         
         <div class="container" id="dataUI">
             <div class="title">
-                <h2>Seluruh Data Karyawan</h2>
-                <span id="closeData">&#10005</span>
+                <div class="titles">
+                    <h2>Seluruh Data Karyawan</h2>
+                    <a href="#" onclick="deleteData();" class="btnDel">Hapus semua data</a>
+                </div>
+                <div class="titles-btn">
+                    <span id="closeData">&#10005</span>
+                </div>
             </div>
-            <a href="#" onclick="deleteData();" class="btnDel">Hapus semua data</a>
             
             <div id="dataAll"></div>
         </div>
