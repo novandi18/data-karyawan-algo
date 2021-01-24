@@ -17,6 +17,18 @@ let dataK = document.getElementById("dataK");
 let noData = document.getElementById("noData");
 let gajiInp = document.getElementById('gaji');
 
+// Custom Input Status
+$('.dropdown-el').click(function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(this).toggleClass('expanded');
+    $('#' + $(e.target).attr('for')).prop('checked', true);
+});
+
+$(document).click(function() {
+    $('.dropdown-el').removeClass('expanded');
+});
+
 // Jika input gaji diketik, maka jalanan fungsi formatRupiah()
 gajiInp.addEventListener("keyup", function(e) {
     gajiInp.value = formatRupiah(this.value);
@@ -46,17 +58,40 @@ tableData();
 // Jika tombol submit pada form diklik, jalan fungsi getData()
 form.addEventListener("submit", function getData() {
     // Tangkap value dari tiap inputan
-    namaVal = document.getElementById('nama').value;
-    alamatVal = document.getElementById('alamat').value;
-    usiaVal = document.getElementById('usia').value;
-    gajiVal = document.getElementById('gaji').value;
+    let namaVal = document.getElementById('nama').value;
+    let alamatVal = document.getElementById('alamat').value;
+    let usiaVal = document.getElementById('usia').value;
+    let gajiVal = document.getElementById('gaji').value;
+    let tunjangan = 1000000;
+    let checkStat = document.getElementById('status').checked;
+
+    // Hilangkan tanda titik pada string agar bisa dijumlahkan dengan variabel $tunjangan
+    let gajiDot = gajiVal.split('.').join("");
+    let gajiInt = parseInt(gajiDot);
+
+    if(checkStat == true) {
+        // Jika data karyawannya statusnya "Sudah Menikah"
+        statusVal = document.getElementById('status').value;
+        // Tambahkan gaji tambahan dengan tunjangan untuk keluarganya
+        gajiFix = gajiInt + tunjangan;
+    } else {
+        // Jika data karyawannya statusnya "Belum Menikah"
+        statusVal = document.getElementById('status2').value;
+        // Gaji tidak berubah
+        gajiFix = gajiInt;
+    }
+
+    // Ubah format inputan gaji menjadi rupiah
+    gajiStr = gajiFix.toString();
+    gajiFinal = formatRupiah(gajiStr);
     
     // Pindahkan semua value inputan ke dalam array $data
     data.push({
         nama: namaVal,
         alamat: alamatVal,
         usia: usiaVal + " tahun",
-        gaji: "Rp. " + gajiVal,
+        gaji: "Rp. " + gajiFinal,
+        status: statusVal
     });
 
     // Console log isi array $data untuk ngecek apakah udah masuk atau belum 
@@ -68,6 +103,7 @@ form.addEventListener("submit", function getData() {
     let keyAlamat = data[endKey].alamat;
     let keyUsia = data[endKey].usia;
     let keyGaji = data[endKey].gaji;
+    let keyStatus = data[endKey].status;
 
     // Tampilkan modal
     modal.style.display = "block";
@@ -79,6 +115,7 @@ form.addEventListener("submit", function getData() {
     document.getElementById('alamatHasil').innerHTML = keyAlamat;
     document.getElementById('usiaHasil').innerHTML = keyUsia;
     document.getElementById('gajiHasil').innerHTML = keyGaji;
+    document.getElementById('statusHasil').innerHTML = keyStatus;
 
     // Kirim array ke Local Storage
     localStorage.setItem('data', JSON.stringify(data));
@@ -100,7 +137,7 @@ function setAttributes(el, attrs) {
 // Perulangan array of objects (Diambil dari LocalStorage) ke dalam tabel
 function tableData() {
     // Buat variabel yang memiliki 4 item dalam array (Jumlah item dan penamaan item harus persis dengan nama key yang ada dalam array $data (Lihat di line 60 diatas))
-    let headers = ['Nama', 'Alamat', 'Usia', 'Gaji'];
+    let headers = ['Nama', 'Alamat', 'Usia', 'Gaji', 'Status'];
     
     // Tangkap key pada LocalStorage lalu taruh kedalam variabel $dataObj
     let dataObj = localStorage.getItem('data');
@@ -119,6 +156,7 @@ function tableData() {
         document.getElementById("dataAll").appendChild(empty);
         $(".btnDel").css({"display":"none"});
         $(".title").css({"position":"relative","width":"auto"});
+        $(".box .container:nth-child(2)").css({"padding-right":"0"});
     } else {
         $(dataUI).scroll(function() {
             let scroll = $(dataUI).scrollTop();
@@ -128,10 +166,9 @@ function tableData() {
                 $(".title").removeClass("shadow");
             }
         });
-        $(".title").css({"position":"fixed","width":"370px","margin-left":"-10px","padding-left":"10px"});
-        // $(".btnDel").css({"position":"fixed"});
-        $(".box").css({"height":"450px"});
-        $(".box .container:nth-child(2)").css({"width":"500px","padding-right":"15px"});
+        $(".btnDel").css({"display":""});
+        $(".title").css({"position":"fixed","width":"590px"});
+        $(".box .container:nth-child(2)").css({"width":"900px","padding-right":"15px"});
         $("#dataAll").css({"margin-top":"100px"});
         // Jika ada localStorage, hilangkan tulisan "No data"
         document.getElementById("dataAll").innerHTML = "";
@@ -170,7 +207,7 @@ function tableData() {
 // Jika tombol $modalData diklik, akan memunculkan modal $modalData
 btnView.addEventListener("click", function() {
     dataUI.style.display = "block";
-    document.querySelector(".box").style.width = "700px";
+    document.querySelector(".box").style.width = "900px";
     $(".box .container:first-child").css({"width":"300px", "padding-right":"0"});
     btnView.hidden = true;
 });
@@ -190,8 +227,14 @@ span.onclick = function() {
 
 // Function untuk menghapus LocalStorage
 function deleteData() {
-    window.localStorage.clear();
-    data = [];
-    $("#dataAll table").remove();
-    tableData();
+    let alert = confirm("Hapus seluruh data?");
+    if(alert) {
+        window.localStorage.clear();
+        data = [];
+        $("#dataAll table").remove();
+        $("#dataAll").css({"margin-top":"0"});
+        tableData();
+    } else {
+        return false;
+    }
 };

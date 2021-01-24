@@ -34,6 +34,7 @@ html, body {
     border-radius: 10px;
     display: flex;
     padding: 30px 0;
+    height: 450px;
 }
 
 .box .container:first-child {
@@ -190,7 +191,7 @@ button:active {
     padding: 0;
 }
 
-table th {
+table th, td {
     width: 100px;
     text-align: left;
 }
@@ -349,4 +350,114 @@ a {
     bottom: 0;
     position: absolute;
     padding-right: 25px;
+}
+
+/* Input Select Custom */
+.dropdown-el {
+    width: auto;
+    position: relative;
+    display: inline-block;
+    min-height: 2.8em;
+    max-height: 2.8em;
+    overflow: hidden;
+    top: 0.5em;
+    cursor: pointer;
+    text-align: left;
+    white-space: nowrap;
+    color: #444;
+    outline: none;
+    background-color: white;
+    transition: 0.3s all ease-in-out;
+    border: 1px solid rgb(41, 41, 41);
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.dropdown-el:hover {
+    box-shadow: 0px 2px 0px 0px rgb(41, 41, 41);
+    transform: translateY(-2px);
+    transition: all ease .2s;
+}
+
+.dropdown-el input:focus + label {
+  background: rgb(41, 41, 41);;
+}
+
+.dropdown-el input {
+  width: 1px;
+  height: 1px;
+  display: inline-block;
+  position: absolute;
+  opacity: 0.01;
+}
+
+.dropdown-el label {
+  border-top: 0.06em solid rgb(41, 41, 41);;
+  display: block;
+  height: 2em;
+  line-height: 2em;
+  padding-left: 1em;
+  padding-right: 3em;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  cursor: pointer;
+  position: relative;
+  transition: 0.3s color ease-in-out;
+}
+
+.dropdown-el label:nth-child(2) {
+  margin-top: 2.8em;
+  border-top: 0.06em solid rgb(41, 41, 41);;
+}
+
+.dropdown-el input:checked + label {
+  display: block;
+  border-top: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.dropdown-el input:checked + label:nth-child(2) {
+  margin-top: 0;
+  position: relative;
+}
+
+.dropdown-el::after {
+  content: "";
+  position: absolute;
+  right: 0.8em;
+  top: 1.3em;
+  border: 0.3em solid #000;
+  border-color: #000 transparent transparent transparent;
+  transition: 0.4s all ease-in-out;
+}
+
+.dropdown-el.expanded {
+  border: 0.06em solid rgb(41, 41, 41);;
+  background: #fff;
+  border-radius: 0.25em;
+  padding: 0;
+  box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 5px 0px;
+  max-height: 15em;
+}
+
+.dropdown-el.expanded label {
+  border-top: 0.06em solid rgb(41, 41, 41);;
+}
+
+.dropdown-el.expanded label:hover {
+  color: rgb(41, 41, 41);
+  /* font-weight: bold; */
+  background: #eee;
+}
+
+.dropdown-el.expanded input:checked + label {
+  color: rgb(41, 41, 41);;
+  /* font-weight: bold; */
+}
+
+.dropdown-el.expanded::after {
+  transform: rotate(-180deg);
+  top: 1em;
 }
